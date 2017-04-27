@@ -1,8 +1,19 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+
 def nearest_mean(point, means):
 	return np.argmin([np.linalg.norm(point - m) for m in means]) # return the index of the mean in "means" array
+
+def Kmeans(prev_means, CurKMeans, cluster):
+	while ((prev_means != CurKMeans).any()):
+		prev_means = CurKMeans.copy()
+		CurKMeans = np.array([np.mean(X[cluster == l], axis=0) for l in range(len(CurKMeans))])
+		cluster = np.array([nearest_mean(p, CurKMeans) for p in X])
+	return cluster, CurKMeans
+
+
 
 mean = []
 mean.append(np.array([0,0]))
@@ -26,12 +37,7 @@ plt.show()
 
 #LOOP
 prev_means = np.array([1])
-while ((prev_means != CurKMeans).any()):
-	prev_means = CurKMeans.copy()
-	CurKMeans = np.array([np.mean(X[cluster == l], axis=0) for l in range(len(CurKMeans))])
-	cluster = np.array([nearest_mean(p, CurKMeans) for p in X])
-
-cluster = np.array([nearest_mean(p, CurKMeans) for p in X])
+cluster, CurKMeans = Kmeans(prev_means, CurKMeans, cluster)
 
 plt.axis([-3,3,-3,3])
 plt.scatter(X[:,0], X[:,1], c=cluster)
