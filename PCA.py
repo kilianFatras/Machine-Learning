@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def PCA(X):
+def pca(X):
 	#We need the covariance Matrix, here it is : 1/n * t(X) * X
 	covX = 1/len(X) * np.dot(np.transpose(X), X)
 	#The objective is to change the baseline, so we want to have the eigen vector. The eigen vector exist because covX can be diagonalize.
@@ -25,7 +25,7 @@ plt.show()
 #We concatenate x and y, to have a sample of points
 X = np.column_stack((x,y))
 
-newX = PCA(X)
+newX = pca(X)
 
 plt.axis([-3,3,-3,3])
 plt.scatter(newX[:,0], newX[:,1])
