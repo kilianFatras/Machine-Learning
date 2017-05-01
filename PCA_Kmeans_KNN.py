@@ -4,6 +4,19 @@ import Kmeans
 
 
 
+def pca(X):
+	"""input : X, all the point
+       output : X projected on the principal components
+	   function : find the principal components of X
+	"""
+	#We need the covariance Matrix, here it is : 1/n * t(X) * X
+	covX = 1/len(X) * np.dot(np.transpose(X), X)
+	#The objective is to change the baseline, so we want to have the eigen vector. The eigen vector exist because covX can be diagonalize.
+	vecPropre = np.linalg.eig(covX)[1]
+	newX = np.dot(X,vecPropre)
+	return newX
+
+
 def distance(pointA, allPoint):
 	""" input : pointA with unknow classification, allPoint of data set
 		output : array with all distance
@@ -34,6 +47,8 @@ def classification(K, distance, classePoint, numberClasse):
 
 	return classeUnknow, kNn
 
+
+
 ###########################
 if __name__ == '__main__':
 
@@ -43,6 +58,11 @@ if __name__ == '__main__':
 	mean.append(np.array([-1,1]))
 	cov = np.array([[0.1,0],[0,0.1]])
 	X = np.concatenate([np.random.multivariate_normal(m, cov, 100) for m in mean])
+	plt.axis([-3,3,-3,3])
+	plt.scatter(X[:,0], X[:,1], c="blue")
+	plt.show()
+
+	X = pca(X)
 	meanA = []
 	meanA.append(np.array([0,0]))
 	A = np.concatenate([np.random.multivariate_normal(m, cov, 1) for m in meanA])

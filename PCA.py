@@ -3,6 +3,10 @@ import matplotlib.pyplot as plt
 
 
 def pca(X):
+	"""input : X, all the point
+       output : X projected on the principal components
+	   function : find the principal components of X
+	"""
 	#We need the covariance Matrix, here it is : 1/n * t(X) * X
 	covX = 1/len(X) * np.dot(np.transpose(X), X)
 	#The objective is to change the baseline, so we want to have the eigen vector. The eigen vector exist because covX can be diagonalize.
