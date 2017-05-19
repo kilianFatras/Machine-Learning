@@ -8,17 +8,19 @@ def scr_theta_estimation(x, y, steps, alpha):
 	   output : theta estimation
 	   function : calculate theta estimation
 	"""
-	theta = 0
+	theta = [0,0]
 	for idStep in range(steps):
 		for i in range(len(x)):
-			e = y[i] - theta * x[i]
-			theta = theta + alpha * (2 * e * x[i])
+			for idTheta in range(2):
+				e = y[i] - theta[idTheta] * x[i][idTheta]
+				theta[idTheta] = theta[idTheta] + alpha * (2 * e * x[i][idTheta])
 
-		e = 0
-		for idX in range(len(x)):
-			e = e + pow(y[idX] - theta * x[idX], 2)
-		if e < 0.001:
-			break
+		for idTheta in range(2):
+			e = 0
+			for idX in range(len(x)):
+				e = e + pow(y[idX] - theta[idTheta] * x[idX][idTheta], 2)
+			if e < 0.001:
+				break
 	return theta
 
 
@@ -34,14 +36,18 @@ if __name__ == '__main__':
 	x, y = np.random.multivariate_normal(mean, cov, 100).T
 	plt.axis([-3,3,-3,3])
 	plt.scatter(x, y)
+	x1 = [1 for i in range(len(x))]
+	X = np.column_stack((x,x1))
+	#print(X)
 
 	##estimation of theta
 	alpha = 0.0002
 	steps = 5000
-	theta = scr_theta_estimation(x, y, steps, alpha)
+	theta = scr_theta_estimation(X, y, steps, alpha)
+	print(theta)
 
 	##prediction
 	abcisses = np.linspace(-3, 3, 500)
-	predict_y = theta * abcisses
+	predict_y = theta[0] * abcisses + theta[1]
 	plt.scatter(predict_y, abcisses, color = "red")
 	plt.show()
