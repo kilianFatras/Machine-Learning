@@ -7,7 +7,7 @@ import random
 
 
 def sigmoid(x):
-	return 1/(1+np.exp(x))
+	return 1./(1+np.exp(-x))
 
 class perceptron():
 	def __init__(self):
@@ -15,14 +15,14 @@ class perceptron():
 		self.b = random.random()
 
 	def forward(self, x):
-		return sigmoid(np.dot(np.transpose(x), self.w) + self.b)
+		return sigmoid(np.dot(np.transpose(self.w), x) + self.b)
 
 	def backprop(self, x, y, lr):
 		y_predict = self.forward(x)
-		err = y - y_predict
-		self.b -= lr * err * y_predict * (1 - y_predict) #optimization bias
+		err = y_predict - y
+		self.b -= lr * err * y_predict * (1. - y_predict) #optimization bias
 		for id_w in range(2):
-			self.w[id_w] -= lr * err * y_predict * (1 - y_predict) * x[id_w] #optimization weights
+			self.w[id_w] -= lr * err * y_predict * (1. - y_predict) * x[id_w] #optimization weights
 
 
 if __name__ == '__main__':
